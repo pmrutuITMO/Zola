@@ -63,15 +63,15 @@ window_any_first_occurence = window.Window.partitionBy(ssql_df['twogram_last']).
 # Select from data from using window functions the 20 most common solar terms and any solar term with first appearance.
 # Arrange by decade in ascending order, occurence in descending order, 20 most common terms and any term appearance in ascending order of row numbers.
 # Filter the dataframe allowing only the 20 most common solar terms and those terms just appearing for the first time ever.
-#ssql_dfmini = ssql_df.select('*', ssql_f.row_number().over(window_20_common_terms_per_decade).alias('twenty_common'), 
-#	ssql_f.row_number().over(window_any_first_occurence).alias('first_appearance')).\
-#	orderBy(ssql_df['decade'].asc(), ssql_df['occur'].desc(), ssql_f.col('twenty_common').asc(), ssql_f.col('first_appearance').asc()).\
-#	filter((ssql_f.col('twenty_common') <= 20) | (ssql_f.col('first_appearance') == 1))
+ssql_dfmini = ssql_df.select('*', ssql_f.row_number().over(window_20_common_terms_per_decade).alias('twenty_common'), 
+	ssql_f.row_number().over(window_any_first_occurence).alias('first_appearance')).\
+	orderBy(ssql_df['decade'].asc(), ssql_df['occur'].desc(), ssql_f.col('twenty_common').asc(), ssql_f.col('first_appearance').asc()).\
+	filter((ssql_f.col('twenty_common') <= 20) | (ssql_f.col('first_appearance') == 1))
 
 # Comment out line block above and uncomment below  line block for allowing only the 20 most common solar term such that first appearance check is only for those 20 most common terms 
-ssql_dfmini = ssql_df.select('*', ssql_f.row_number().over(window_20_common_terms_per_decade).alias('twenty_common')).\
-	orderBy(ssql_df['decade'].asc(), ssql_df['occur'].desc(), ssql_f.col('twenty_common').asc()).\
-	filter((ssql_f.col('twenty_common') <= 20))
+#ssql_dfmini = ssql_df.select('*', ssql_f.row_number().over(window_20_common_terms_per_decade).alias('twenty_common')).\
+#	orderBy(ssql_df['decade'].asc(), ssql_df['occur'].desc(), ssql_f.col('twenty_common').asc()).\
+#	filter((ssql_f.col('twenty_common') <= 20))
 
 # From above selection merge the columns twogram_first and twogram_last of the 2-gram that were split previously in the mapping function into one column twogram.
 # Group the outcome by decade then aggregate the terms from the twogram column into one row as a list per decade.
